@@ -84,6 +84,61 @@ Expected Report
 
 Ref :
 1. https://www.kite.com/python/answers/how-to-right-align-a-number-in-python
+
+
+TODO:
+
+Align in such a way it leaves no left padding for the biggest number.
+
+Problem :
+a. For a big number, the alignment is not preserved.
+
+	$ python tax.py 3000000000000000
+	Tax Computation
+	---------------
+			   Total CTC : 3,000,000,000,000,000.00
+				   Basic : 1,200,000,000,000,000.00
+	Additional Allowance : 1,800,000,000,000,000.00
+	   Net Annual Salary : 2,759,999,999,999,800.00
+	  Net Monthly Salary : 229,999,999,999,983.34
+			   Total Tax : 827,999,999,549,940.00, ( slab : 0.30 % )
+
+b. For a smaller number, the alignment preserved but lot of leading empty space.
+	$ python tax.py 300000
+	Tax Computation
+	---------------
+			   Total CTC :      300,000.00
+				   Basic :      120,000.00
+	Additional Allowance :      180,000.00
+	   Net Annual Salary :      275,800.00
+	  Net Monthly Salary :       22,983.33
+			   Total Tax :        1,290.00, ( slab : 0.05 % )
+
+
+Expected Result :
+
+	$ python tax.py 3000000000000000
+	Tax Computation
+	---------------
+			   Total CTC : 3,000,000,000,000,000.00
+				   Basic : 1,200,000,000,000,000.00
+	Additional Allowance : 1,800,000,000,000,000.00
+	   Net Annual Salary : 2,759,999,999,999,800.00
+	  Net Monthly Salary :   229,999,999,999,983.34
+			   Total Tax :   827,999,999,549,940.00, ( slab : 0.30 % )
+
+
+	$ python tax.py 300000
+	Tax Computation
+	---------------
+			   Total CTC : 300,000.00
+				   Basic : 120,000.00
+	Additional Allowance : 180,000.00
+	   Net Annual Salary : 275,800.00
+	  Net Monthly Salary :  22,983.33
+			   Total Tax :   1,290.00, ( slab : 0.05 % )
+
+
 '''
 
 

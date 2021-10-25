@@ -38,13 +38,12 @@ else:  #net_annual_salary > 1500000
 #
 print("Tax Computation")
 print("---------------")
-print("           Total CTC : {0}".format(total_ctc)) 
-print("               Basic : {0}".format(basic)) 
-print("Additional Allowance : {0}".format(additional_allowance)) 
-print("   Net Annual Salary : {0}".format(net_annual_salary)) 
-print("  Net Monthly Salary : {0}".format(net_montly_salary)) 
-print("           Total Tax : {0}".format(tax)) 
-print("            Tax Slab : {0}".format(slab)) 
+print("           Total CTC : {0:>15,.2f}".format(total_ctc)) 
+print("               Basic : {0:>15,.2f}".format(basic)) 
+print("Additional Allowance : {0:>15,.2f}".format(additional_allowance)) 
+print("   Net Annual Salary : {0:>15,.2f}".format(net_annual_salary)) 
+print("  Net Monthly Salary : {0:>15,.2f}".format(net_montly_salary)) 
+print("           Total Tax : {0:>15,.2f}, ( slab : {1} )".format(tax, slab)) 
 
 
 '''

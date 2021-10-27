@@ -36,19 +36,26 @@ else:  #net_annual_salary > 1500000
 #
 #Generate the Report 
 #
+FMT_SPEC = "{0:,.2f}"
+#FMT_SPEC = "{0:.2f}"
+max_len = len( FMT_SPEC.format(total_ctc) )
+
+def fmt_num(val, max_len):
+    return FMT_SPEC.format(val).rjust(max_len)
+
 print("Tax Computation")
 print("---------------")
-print("           Total CTC : {0:>15,.2f}".format(total_ctc)) 
-print("               Basic : {0:>15,.2f}".format(basic)) 
-print("Additional Allowance : {0:>15,.2f}".format(additional_allowance)) 
-print("   Net Annual Salary : {0:>15,.2f}".format(net_annual_salary)) 
-print("  Net Monthly Salary : {0:>15,.2f}".format(net_montly_salary)) 
-print("           Total Tax : {0:>15,.2f}, ( slab : {1} )".format(tax, slab)) 
+print("           Total CTC : {0}".format(fmt_num(total_ctc, max_len)))
+print("               Basic : {0}".format(fmt_num(basic, max_len)))
+print("Additional Allowance : {0}".format(fmt_num(additional_allowance, max_len)))
+print("   Net Annual Salary : {0}".format(fmt_num(net_annual_salary, max_len)))
+print("  Net Monthly Salary : {0}".format(fmt_num(net_montly_salary, max_len))) 
+print("           Total Tax : {0}, ( slab : {1} )".format(fmt_num(tax, max_len), slab)) 
 
 
 '''
-TODO :
 Format the report in such a way all the amounts are properly alligned.
+Also have control to print number with or without comman seperation.
 
 Current Report
 --------------

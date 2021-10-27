@@ -1,5 +1,22 @@
 import sys 
+
+#Validating the command line arguments
+if(len(sys.argv) < 2):
+    print("Usage : ")
+    print("   tax.py <total ctc> [0/1]")
+    print("    0 : report numbers without comma")
+    print("    1 : report numbers with comma")
+    exit(1)
+
 total_ctc = float(sys.argv[1]) 
+
+report_number_with_comma = True
+if(len(sys.argv) > 2):
+    if(sys.argv[2] == '0'):
+        report_number_with_comma = False
+    else:
+        report_number_with_comma = True
+
  
 basic = total_ctc * 0.4 
 additional_allowance = total_ctc * 0.6 
@@ -36,21 +53,33 @@ else:  #net_annual_salary > 1500000
 #
 #Generate the Report 
 #
-FMT_SPEC = "{0:,.2f}"
-#FMT_SPEC = "{0:.2f}"
-max_len = len( FMT_SPEC.format(total_ctc) )
 
-def fmt_num(val, max_len):
-    return FMT_SPEC.format(val).rjust(max_len)
+#format with commas
+
+FMT_SPEC = None
+if(report_number_with_comma):
+    #format with comma
+    FMT_SPEC = "{0:,.2f}"
+else:
+    #format without comma
+    FMT_SPEC = "{0:.2f}"
+
+
+#use the total_ctc to calculate the maximum length
+MAX_LEN = len( FMT_SPEC.format(total_ctc) )
+
+def fmt_num(val):
+    #format and right justify the given value with maximum length
+    return FMT_SPEC.format(val).rjust(MAX_LEN)
 
 print("Tax Computation")
 print("---------------")
-print("           Total CTC : {0}".format(fmt_num(total_ctc, max_len)))
-print("               Basic : {0}".format(fmt_num(basic, max_len)))
-print("Additional Allowance : {0}".format(fmt_num(additional_allowance, max_len)))
-print("   Net Annual Salary : {0}".format(fmt_num(net_annual_salary, max_len)))
-print("  Net Monthly Salary : {0}".format(fmt_num(net_montly_salary, max_len))) 
-print("           Total Tax : {0}, ( slab : {1} )".format(fmt_num(tax, max_len), slab)) 
+print("           Total CTC : {0}".format(fmt_num(total_ctc)))
+print("               Basic : {0}".format(fmt_num(basic)))
+print("Additional Allowance : {0}".format(fmt_num(additional_allowance)))
+print("   Net Annual Salary : {0}".format(fmt_num(net_annual_salary)))
+print("  Net Monthly Salary : {0}".format(fmt_num(net_montly_salary))) 
+print("           Total Tax : {0}, ( slab : {1} )".format(fmt_num(tax), slab)) 
 
 
 '''

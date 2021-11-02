@@ -8,6 +8,7 @@ if(len(sys.argv) < 2):
     print("    1 : report numbers with comma")
     exit(1)
 
+#Process the arguments
 total_ctc = float(sys.argv[1]) 
 
 report_number_with_comma = True
@@ -17,18 +18,23 @@ if(len(sys.argv) > 2):
     else:
         report_number_with_comma = True
 
- 
+#-
+# Compute the tax breakup
+#-
 basic = total_ctc * 0.4 
 additional_allowance = total_ctc * 0.6 
 employee_contribution = basic * 0.12 
 employer_contribution = basic * 0.08 
 PROFESSIONAL_TAX = 200 
  
-total_deductions = employer_contribution + employee_contribution + PROFESSIONAL_TAX 
+total_deductions = employer_contribution + \
+                   employee_contribution + \
+                   PROFESSIONAL_TAX 
+
 net_annual_salary = total_ctc - total_deductions 
 net_montly_salary = net_annual_salary / 12 
 
-#tax computation sheet 
+#tax computation based on slabs
 tax = 0
 slab = None
 if (net_annual_salary <= 250000): 
@@ -54,8 +60,6 @@ else:  #net_annual_salary > 1500000
 #Generate the Report 
 #
 
-#format with commas
-
 FMT_SPEC = None
 if(report_number_with_comma):
     #format with comma
@@ -63,7 +67,6 @@ if(report_number_with_comma):
 else:
     #format without comma
     FMT_SPEC = "{0:.2f}"
-
 
 #use the total_ctc to calculate the maximum length
 MAX_LEN = len( FMT_SPEC.format(total_ctc) )

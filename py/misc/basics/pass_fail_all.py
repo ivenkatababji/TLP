@@ -48,6 +48,7 @@ for marks in marks_list:
     if(passMark):
         pass_count +=  1
         total_pass_marks += marks
+    #todo : remove the else block and achive the same result
     else:
         fail_count += 1
         total_fail_marks += marks

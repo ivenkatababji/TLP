@@ -26,12 +26,26 @@ def div(a, b):
 '''
 reminder(a,b)
     Devide the a with b and return the reminder
+
+Integer Calculations
+Floating Point Calculations
+
 '''
-def reminder(a, b):
+def reminder1(n, d):
     r = 0
     #compute reminder
     #TODO : Implement this without using % operator
+    q = n / d
+    r = n - (q*d)
     return r
+
+def reminder2(n, d):
+    while(n >= d):
+        n = n - d
+    return n
+
+def reminder(n, d):
+    return reminder1(n,d)
 
 
 '''

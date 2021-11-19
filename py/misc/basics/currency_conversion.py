@@ -1,7 +1,7 @@
 '''
 Given a foreign currency, convert it to INR
 
-currency_conversion.py --help [1/2]
+currency_conversion.py --help [1/2] [reference currency]
 currency_conversion.py <amount> <currency> <target currency>
 
 e.g.,
@@ -25,24 +25,35 @@ CR_DATA = loadData()
 
 def printUsage():
     print("Usage :")
-    print(" currency_conversion.py --help [1/2]")
+    print(" currency_conversion.py --help [1/2] [reference currency]")
+    print("    reference currency is applicable for help level 2")
     print(" currency_conversion.py <amount> <currency> <target currency>")
  
-def printHelp(level):
-    printUsage()
-    if(level == 1):
-        print("List of Currencies :")
-        print(CR_DATA.keys())
-    elif(level == 2):
-        print("List of Currencies (ex) :")
-        for currency in CR_DATA.keys():
-            print("{} : {}".format(currency, CR_DATA[currency]["name"]))
-
 def convert_cur(amount, source_currency, target_currency):
     source_cur_rate = CR_DATA[source_currency]["rate"]
     target_cur_rate = CR_DATA[target_currency]["rate"]
     return (amount * target_cur_rate * 1.0) / source_cur_rate
 
+def printHelp(level, ref_currency = None):
+    printUsage()
+    if(level == 1):
+        print("List of Currencies :")
+        print(CR_DATA.keys())
+    elif(level == 2):
+        if(not ref_currency):
+            print("List of Currencies (ex) :")
+            for currency in CR_DATA.keys():
+                print("{} : {}".format(
+                    currency, 
+                    CR_DATA[currency]["name"]))
+        else:
+            print("List of Currencies (ex) :")
+            for currency in CR_DATA.keys():
+                print("{} : {} ({} / {})".format(
+                    currency, 
+                    CR_DATA[currency]["name"],
+                    convert_cur(1, ref_currency, currency),
+                    ref_currency))
 
 '''''''''''''''''''''''''''''''''
         Main Processing
@@ -58,13 +69,19 @@ if(len(args) == 0):
 else:
     if(args[0].lower() == "--help"):
         level = 1
-        if(len(args) == 2):
+        if(len(args) >= 2):
             level = int(args[1])
-        printHelp(level)
+        ref_currency = None
+        if(len(args) == 3):
+            ref_currency = args[2]
+            if(ref_currency not in CR_DATA):
+                print("Error : Unknown currency ({})".format(
+                    ref_currency))
+        printHelp(level, ref_currency)
         exit(0)
     elif(len(args) != 3):
         print("Invalid Arguments.")
-        printUsage()
+        printUsage(0)
         exit(1)
 
 #

@@ -77,6 +77,7 @@ else:
             if(ref_currency not in CR_DATA):
                 print("Error : Unknown currency ({})".format(
                     ref_currency))
+                exit(0)
         printHelp(level, ref_currency)
         exit(0)
     elif(len(args) != 3):

@@ -3,6 +3,13 @@ Given a foreign currency, convert it to INR
 
 currency_conversion.py --help [1/2] [reference currency]
 currency_conversion.py <amount> <currency> <target currency>
+currency_conversion.py --matrix usd inr sgd pkr
+
+              usd       inr       sgd       pkr
+    usd      1.000     77.04      1.35     172.29
+    inr      0.013     1.00       0.02      2.31
+    sgd      0.73      55.01      1.00     127.29
+    pkr      0.006     0.432      0.008     1.00 
 
 e.g.,
 

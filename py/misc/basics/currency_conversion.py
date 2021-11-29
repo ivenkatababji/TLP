@@ -30,16 +30,37 @@ def loadData():
 
 CR_DATA = loadData()
 
-def printUsage():
-    print("Usage :")
-    print(" currency_conversion.py --help [1/2] [reference currency]")
-    print("    reference currency is applicable for help level 2")
-    print(" currency_conversion.py <amount> <currency> <target currency>")
- 
 def convert_cur(amount, source_currency, target_currency):
     source_cur_rate = CR_DATA[source_currency]["rate"]
     target_cur_rate = CR_DATA[target_currency]["rate"]
     return (amount * target_cur_rate * 1.0) / source_cur_rate
+
+def printUsage():
+    print("Usage :")
+    print(" currency_conversion.py --help [1/2] [reference currency]")
+    print("    reference currency is applicable for help level 2")
+    print("")
+    print(" currency_conversion.py --convert <amount> <currency> <target currency>")
+    print("")
+    print(" currency_conversion.py --matrix <currency> <currency> ...")
+ 
+def tabulateCurConv(cur_list):
+    #prepare column heade
+    # each currency code padded with some space
+    col_header = "     "
+    for c in cur_list:
+        col_header += c.center(11)
+    print(col_header)
+
+    #print each row : <SOURCE>  <VALUE> <VALUE> ..... 
+    # The <value> for each of the target currency
+    # The <alue> to be printer below the target currency 
+    for sc in cur_list:
+        row = sc.ljust(5)
+        for tc in cur_list:
+            row += "{:.4f}".format(convert_cur(1, sc, tc)).center(11)
+        print(row)
+
 
 def printHelp(level, ref_currency = None):
     printUsage()
@@ -62,53 +83,15 @@ def printHelp(level, ref_currency = None):
                     convert_cur(1, ref_currency, currency),
                     ref_currency))
 
-'''''''''''''''''''''''''''''''''
-        Main Processing
-'''''''''''''''''''''''''''''''''
-args = sys.argv[1:]
+def validateCurrencyList(cur_list):
+    retVal = True
+    for c in cur_list:
+        if(c not in CR_DATA):
+            print("Error : Unknown currency ({})".format(c))
+            retVal = False
+    return retVal
 
-#
-#Argument Validation and Processing
-#
-if(len(args) == 0):
-    printHelp(0)
-    exit(0)
-else:
-    if(args[0].lower() == "--help"):
-        level = 1
-        if(len(args) >= 2):
-            level = int(args[1])
-        ref_currency = None
-        if(len(args) == 3):
-            ref_currency = args[2]
-            if(ref_currency not in CR_DATA):
-                print("Error : Unknown currency ({})".format(
-                    ref_currency))
-                exit(0)
-        printHelp(level, ref_currency)
-        exit(0)
-    elif(len(args) != 3):
-        print("Invalid Arguments.")
-        printUsage(0)
-        exit(1)
-
-#
-#Input Initialisation
-#
-amount = float(args[0])
-source_currency = args[1].lower()
-target_currency = args[2].lower()
-
-#
-#Input Validation
-#
-if(source_currency not in CR_DATA):
-    print("Error : Unknown currency ({}). Cant convert.".format(
-        source_currency))
-elif(target_currency not in CR_DATA):
-    print("Error : Unknown currency ({}). Cant convert.".format(
-        target_currency))
-else:
+def curConvert(amount, source_currency, target_currency):
     #
     # Currency Conversion
     #
@@ -133,5 +116,57 @@ else:
                 source_currency,
                 target_val,
                 target_currency))
+
+
+
+'''''''''''''''''''''''''''''''''
+        Main Processing
+'''''''''''''''''''''''''''''''''
+
+args = sys.argv[1:]
+
+#
+#Argument Validation and Processing
+#
+if(len(args) == 0):
+    printHelp(0)
+    exit(0)
+else:
+    #---------------------------------------------------------
+    mode = args[0].lower()
+    if(mode == "--help"):
+        level = 1
+        if(len(args) >= 2):
+            level = int(args[1])
+        ref_currency = None
+        if(len(args) == 3):
+            ref_currency = args[2]
+            if(not validateCurrencyList([ref_currency])):
+                exit(0)
+        printHelp(level, ref_currency)
+        exit(0)
+    #---------------------------------------------------------
+    elif(mode == "--matrix"):
+        if(len(args) < 3):
+            print("Invalid Arguments")
+            printUsage()
+            exit(1)
+        else:
+            cur_list_input = args[1:]
+            if(validateCurrencyList(cur_list_input)):
+                tabulateCurConv(cur_list_input)
+            exit(0)
+    #---------------------------------------------------------
+    elif(mode == "--convert"):
+        amount = float(args[1])
+        source_currency = args[2].lower()
+        target_currency = args[3].lower()
+        if(validateCurrencyList([source_currency, target_currency])):
+            curConvert(amount, source_currency, target_currency)
+    #---------------------------------------------------------
+    else:
+        print("Invalid Arguments.")
+        printUsage()
+        exit(1)
 
 exit(0)

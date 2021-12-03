@@ -125,39 +125,45 @@ def curConvert(amount, source_currency, target_currency):
 
 args = sys.argv[1:]
 
+num_args = len(args)
+
 #
 #Argument Validation and Processing
 #
-if(len(args) == 0):
+if(num_args == 0):
     printHelp(0)
-    exit(0)
+    exit(1)
 else:
-    #---------------------------------------------------------
     mode = args[0].lower()
+    #---------------------------------------------------------
     if(mode == "--help"):
         level = 1
-        if(len(args) >= 2):
+        if(num_args >= 2):
             level = int(args[1])
         ref_currency = None
-        if(len(args) == 3):
+        if(num_args == 3):
             ref_currency = args[2]
             if(not validateCurrencyList([ref_currency])):
                 exit(0)
         printHelp(level, ref_currency)
-        exit(0)
     #---------------------------------------------------------
-    elif(mode == "--matrix"):
-        if(len(args) < 3):
-            print("Invalid Arguments")
-            printUsage()
-            exit(1)
-        else:
-            cur_list_input = args[1:]
-            if(validateCurrencyList(cur_list_input)):
+    elif((mode == "--matrix") and (num_args >= 3)):
+
+        cur_list_input = args[1:]
+
+        #prune the duplicate currencies from the matrix
+        for i in cur_list_input:
+            if(cur_list_input.count(i) > 1):
+                cur_list_input.remove(i)
+        #minimum number of currencies for matrix is two
+        if( (len(cur_list_input) >=2 ) and 
+            validateCurrencyList(cur_list_input)):
                 tabulateCurConv(cur_list_input)
-            exit(0)
+        else:
+            print("Invalid Arguments.")
+            printUsage()
     #---------------------------------------------------------
-    elif(mode == "--convert"):
+    elif( (mode == "--convert") and (num_args == 4) ):
         amount = float(args[1])
         source_currency = args[2].lower()
         target_currency = args[3].lower()

@@ -164,7 +164,14 @@ else:
             printUsage()
     #---------------------------------------------------------
     elif( (mode == "--convert") and (num_args == 4) ):
-        amount = float(args[1])
+        amount = 0.0
+        try:
+            amount = float(args[1])
+        except ValueError as e:
+            print("Err. Caught exception : ValueError - {}".format(e))
+            printUsage()
+            exit(1)
+
         source_currency = args[2].lower()
         target_currency = args[3].lower()
         if(validateCurrencyList([source_currency, target_currency])):

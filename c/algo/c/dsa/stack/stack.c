@@ -88,6 +88,17 @@ value_type* stack_peek(Stack* pStack)
         return NULL;
 }
 
+
+/*---------------- let's test it out ---------------------*/
+long long current_timestamp_millis() 
+{
+    struct timeval te;
+    gettimeofday(&te, NULL); // get current time
+    long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
+    return milliseconds;
+}
+
+
 int main(int argc, char** argv)
 {
     int nRet = 0;
@@ -95,7 +106,7 @@ int main(int argc, char** argv)
     if(argc < 2)
         exit(0);
 
-    /* number of push and pops */
+    /* number of elements */
     int count = atoi(argv[1]);
 
     /* calculate the step size to limit the number of printfs */
@@ -109,13 +120,20 @@ int main(int argc, char** argv)
             if(temp >= 10)
                 step *= 10;
         }
+        printf("Print step size : %d.\n", step);
     }
 
     Stack* pStack = stack_new();
     int i=0;
 
+    int64_t start = current_timestamp_millis();
+
     for(i = 0;i<count;i++)
         stack_push(pStack, i);
+
+    printf("Time spent : %lld(ms)\nPushed %d elements. Stack size : %d.\n", 
+            current_timestamp_millis()-start,
+            i, pStack->nSize);
 
     int x,y;
     for(i = 0;i<count;i++)
@@ -124,11 +142,20 @@ int main(int argc, char** argv)
         y = *(stack_pop(pStack));
         if((i < 10) || (i%step == 0))
         {
-            printf("%d,%d - %d, %d\n", i,pStack->nSize, x, y);
+            printf("Time spent : %lld(ms)\nctr : %d, size : %d - peek : %d, pop : %d\n", 
+                    current_timestamp_millis()-start,
+                    i,pStack->nSize, x, y);
         }
     }
 
+    printf("Time spent : %lld(ms)\n", 
+            current_timestamp_millis()-start);
+
+    printf("About to delete the stack.\n");
+
     stack_delete(pStack);
+    printf("Total Time spent : %lld(ms)\n", 
+            current_timestamp_millis()-start);
 
     return nRet;
 }
